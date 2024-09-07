@@ -56,4 +56,21 @@ export class GeneralAPI extends API {
       }
     });
   }
+
+  async getStreak() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await Helper.delay(this.default_delay, this.account, `Fetch Streak...`, this);
+        await this.fetch(
+          `${this.base_url}/user-visits/streak/`,
+          "GET",
+          this.token
+        );
+        await Helper.delay(this.default_delay, this.account, `Succesfully Get Streak...`, this);
+        resolve();
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
 }

@@ -62,14 +62,6 @@ async function operation(acc, query, queryObj, proxy) {
       await generalAPI.getProfile();
     }
     
-    // await Helper.delay(
-    //   60000 * 10,
-    //   major.account,
-    //   "Account Processing Complete, Delaying for 10 minutes",
-    //   major
-    // );
-
-    // await operation(acc, query, queryObj, proxy);
   } catch (error) {
 
     if(error.includes('520')){
@@ -152,14 +144,6 @@ async function startBot() {
           await tele.disconnect();
           paramList.push([user, query, queryObj, proxy]);
         } else {
-          // const text_account = Helper.readQueryFile("accounts/" + acc + "/query.txt");
-          // const {token, tele_id} = Helper.parseAccountText(text_account);
-          // const query = {
-          //   token,
-          //   tele_id
-          // }
-
-          // paramList.push([null, query, null, proxy]);
 
           const query = Helper.readQueryFile("accounts/" + acc + "/query.txt");
           const queryObj = Helper.queryToJSON(query);
@@ -175,19 +159,6 @@ async function startBot() {
       for (const params of paramList) {
         await operation(params[0], params[1], params[2], params[3]);
       }
-
-      // const promiseList = paramList.map(async (data) => {
-      //   await operation(data[0], data[1], data[2], data[3]);
-      // });
-
-      // await Promise.all(promiseList);
-
-      // await Helper.delay(
-      //   2 * 60 * 60 * 1000, // 2 hour
-      //   null,
-      //   "Account Processing Complete, Delaying for 2 Hour",
-      //   null
-      // );
       
       // waiting for nex action (2 hour)
       Helper.logAction('INFO', null, 'All Account Processing Complete...');
