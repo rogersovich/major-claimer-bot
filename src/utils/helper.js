@@ -4,7 +4,6 @@ import momentTz from "moment-timezone";
 import fs from "fs";
 import path from "path";
 import { parse, stringify } from "querystring";
-import twist from "./twist.js";
 
 import chalk from 'chalk';
 
@@ -71,46 +70,6 @@ export class Helper {
       return null;
     }
   }
-
-  static delay = (ms, acc, msg, obj) => {
-    return new Promise((resolve) => {
-      let remainingMilliseconds = ms;
-
-      if (acc != undefined) {
-        twist.log(msg, acc, obj, `Delaying for ${this.msToTime(ms)}`);
-      } else {
-        twist.info(`Delaying for ${this.msToTime(ms)}`);
-      }
-
-      const interval = setInterval(() => {
-        remainingMilliseconds -= 1000;
-        if (acc != undefined) {
-          twist.log(
-            msg,
-            acc,
-            obj,
-            `Delaying for ${this.msToTime(remainingMilliseconds)}`
-          );
-        } else {
-          twist.info(`Delaying for ${this.msToTime(remainingMilliseconds)}`);
-        }
-
-        if (remainingMilliseconds <= 0) {
-          clearInterval(interval);
-          resolve();
-        }
-      }, 1000);
-
-      setTimeout(async () => {
-        clearInterval(interval);
-        await twist.clearInfo();
-        if (acc) {
-          twist.log(msg, acc, obj);
-        }
-        resolve();
-      }, ms);
-    });
-  };
 
   static getSession(sessionName) {
     try {

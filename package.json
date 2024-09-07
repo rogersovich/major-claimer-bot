@@ -23,7 +23,6 @@
     "moment-timezone": "^0.5.45",
     "node-fetch": "^3.3.2",
     "telegram": "^2.22.2",
-    "twisters": "^1.1.0",
     "winston": "^3.13.0"
   }
 }
