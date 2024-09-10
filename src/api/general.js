@@ -24,8 +24,8 @@ export class GeneralAPI extends API {
         }else{
           Helper.logAction('INFO', this.account.id, '(END)(POST) Already Daily CheckIn...');  
         }
-
-        await Helper.delayLog(3000, this.account.id, 'Waiting next action in', 'WARNING');
+        const randomDelayShort = Helper.getRandomDelayShort()
+        await Helper.delayLog(randomDelayShort, this.account.id, 'Waiting next action in', 'WARNING');
         resolve();
       } catch (err) {
         reject(`(POST: /user-visits/visit): ${err}...`);

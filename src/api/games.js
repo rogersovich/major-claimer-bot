@@ -43,7 +43,7 @@ export class GamesAPI extends API {
   async playBonusCoins(coins_value) {
     return new Promise(async (resolve, reject) => {
       try {
-        Helper.logAction('INFO', this.account.id, `(START)(POST) Send Result Play Bonus Coin: ${coins_value}...`); 
+        Helper.logAction('INFO', this.account.id, `(START)(POST) Send Result Play...`); 
         await this.fetch(
           `${this.base_url}/bonuses/coins/`,
           "POST",
@@ -53,7 +53,8 @@ export class GamesAPI extends API {
           }
         );
         Helper.logAction('INFO', this.account.id, `(END)(POST) Succesfully Play Bonuses Coin: ${coins_value}...`);  
-        await Helper.delayLog(3000, this.account.id, 'Waiting next action in', 'WARNING');
+        const randomDelayLong = Helper.getRandomDelayLong()
+        await Helper.delayLog(randomDelayLong, this.account.id, 'Waiting next action in', 'WARNING');
         resolve();
       } catch (err) {
 
@@ -72,7 +73,8 @@ export class GamesAPI extends API {
           this.token
         );
         Helper.logAction('INFO', this.account.id, `(END)(POST) Succesfully Play Roulette Coin: ${data.rating_award}...`);  
-        await Helper.delayLog(3000, this.account.id, 'Waiting next action in', 'WARNING');
+        const randomDelayLong = Helper.getRandomDelayLong()
+        await Helper.delayLog(randomDelayLong, this.account.id, 'Waiting next action in', 'WARNING');
         resolve();
       } catch (err) {
         const checkCode400 = err.message.includes("400")
@@ -132,7 +134,8 @@ export class GamesAPI extends API {
 
         this.is_play_swipe_coin = false
         Helper.logAction('INFO', this.account.id, `(END)(POST) Succesfully Play Swipe Coin: ${coins_value}...`);  
-        await Helper.delayLog(3000, this.account.id, 'Waiting next action in', 'WARNING');
+        const randomDelayLong = Helper.getRandomDelayLong()
+        await Helper.delayLog(randomDelayLong, this.account.id, 'Waiting next action in', 'WARNING');
         resolve();
       } catch (err) {
         this.is_play_swipe_coin = true

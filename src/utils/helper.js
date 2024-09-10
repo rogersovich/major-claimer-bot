@@ -333,11 +333,13 @@ export class Helper {
 
   static logAction(type, tele_id, action){
     tele_id = tele_id ?? 'BOT'
+    const date = moment().format("YYYY-MM-DD HH:mm:ss");
     switch (type) {
       case 'INFO':
         log(
           chalk.yellow(
             '[Major Claimer Bot]' +
+            `[${chalk.white(date)}]` +
             `[${chalk.blue(type)}]` +
             `[${chalk.blue(tele_id)}]` +
             `: ${chalk.blue(action)}`
@@ -349,6 +351,7 @@ export class Helper {
         log(
           chalk.yellow(
             '[Major Claimer Bot]' +
+            `[${chalk.white(date)}]` +
             `[${chalk.green(type)}]` +
             `[${chalk.green(tele_id)}]` +
             `: ${chalk.green(action)}`
@@ -360,6 +363,7 @@ export class Helper {
         log(
           chalk.yellow(
             '[Major Claimer Bot]' +
+            `[${chalk.white(date)}]` +
             `[${chalk.magenta(type)}]` +
             `[${chalk.magenta(tele_id)}]` +
             `: ${chalk.magenta(action)}`
@@ -371,6 +375,7 @@ export class Helper {
         log(
           chalk.yellow(
             '[Major Claimer Bot]' +
+            `[${chalk.white(date)}]` +
             `[${chalk.red(type)}]` +
             `[${chalk.red(tele_id)}]` +
             `: ${chalk.red(action)}`
@@ -382,6 +387,7 @@ export class Helper {
         log(
           chalk.yellow(
             '[Major Claimer Bot]' +
+            `[${chalk.white(date)}]` +
             `[${chalk.cyan(type)}]` +
             `[${chalk.cyan(tele_id)}]` +
             `: ${chalk.cyan(action)}`
@@ -393,6 +399,7 @@ export class Helper {
         log(
           chalk.yellow(
             '[Major Claimer Bot]' +
+            `[${chalk.white(date)}]` +
             `[${chalk.white(type)}]` +
             `[${chalk.white(tele_id)}]` +
             `: ${chalk.white(action)}`
@@ -400,6 +407,17 @@ export class Helper {
         );
         break;
     }
-    
+  }
+
+  static getRandomDelayLong() {
+    const min = 2 * 60 * 1000; // 2 minutes in milliseconds
+    const max = 4 * 60 * 1000; // 4 minutes in milliseconds
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  static getRandomDelayShort() {
+    const min = 1 * 60 * 1000; // 1 minutes in milliseconds
+    const max = 2 * 60 * 1000; // 2 minutes in milliseconds
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 }
