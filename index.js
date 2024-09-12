@@ -164,7 +164,7 @@ async function startBot() {
       }
       
       // waiting for nex action (2 hour)
-      Helper.logAction('INFO', fullName, `${chalk.blue('✅ All Account Processing Complete')}`);
+      Helper.logAction('INFO', 'BOT', `${chalk.blue('✅ All Account Processing Complete')}`);
       await Helper.delaySimple(2 * 60 * 60 * 1000, 'BOT', `${chalk.yellow('💤 Sleep in 2 hours')}`, 'INFO');
 
       for (const params of paramList) {

@@ -55,7 +55,7 @@ export class GamesAPI extends API {
         const checkCode400 = err.message.includes("400")
 
         if(checkCode400){
-          Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️  Already Get Bonus Coin'));  
+          Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️ Already Get Bonus Coin'));  
           await this.logSleep()
           resolve();
         }
@@ -76,7 +76,7 @@ export class GamesAPI extends API {
             coins: coins_value
           }
         );
-        Helper.logAction('INFO', this.getFullName(), this.getLogCyan(`🪙  Claimed Coin: ${coins_value}`));  
+        Helper.logAction('INFO', this.getFullName(), this.getLogCyan(`🪙 Claimed Coin: ${coins_value}`));  
         await this.logSleepDelay()
         resolve();
       } catch (err) {
@@ -95,14 +95,14 @@ export class GamesAPI extends API {
           "POST",
           this.token
         );
-        Helper.logAction('INFO', this.getFullName(), this.getLogCyan(`🪙  Claimed Coin: ${data.rating_award}`));  
+        Helper.logAction('INFO', this.getFullName(), this.getLogCyan(`🪙 Claimed Coin: ${data.rating_award}`));  
         await this.logSleepDelay()
         resolve();
       } catch (err) {
         const checkCode400 = err.message.includes("400")
 
         if(checkCode400){
-          Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️  Already Play Roulette')); 
+          Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️ Already Play Roulette')); 
           await this.logSleep()
           resolve();
         }
@@ -131,7 +131,7 @@ export class GamesAPI extends API {
         const checkCode400 = err.message.includes("400")
 
         if(checkCode400){
-          Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️  Already Play Swipe Coin')); 
+          Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️ Already Play Swipe Coin')); 
           await this.logSleep()
           resolve();
         }
@@ -155,7 +155,7 @@ export class GamesAPI extends API {
         );
 
         this.is_play_swipe_coin = false
-        Helper.logAction('INFO', this.getFullName(), this.getLogCyan(`🪙  Claimed Coin: ${coins_value}`)); 
+        Helper.logAction('INFO', this.getFullName(), this.getLogCyan(`🪙 Claimed Coin: ${coins_value}`)); 
         await this.logSleepDelay()
         resolve();
       } catch (err) {
@@ -163,7 +163,7 @@ export class GamesAPI extends API {
         const checkCode400 = err.message.includes("400")
 
         if(checkCode400){
-          Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️  Already Play Swipe Coin')); 
+          Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️ Already Play Swipe Coin')); 
           await this.logSleep()
           resolve();
         }
@@ -214,7 +214,7 @@ export class GamesAPI extends API {
         const checkCode400 = err.message.includes("400")
 
         if(checkCode400){
-          Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️  Already Claimed Puzzle')); 
+          Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️ Already Claimed Puzzle')); 
           await this.logSleep()
           resolve();
         }

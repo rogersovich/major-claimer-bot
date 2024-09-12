@@ -73,7 +73,7 @@ export class TasksAPI extends API {
         const checkCode400 = err.message.includes("400")
 
         if(checkCode400){
-          Helper.logAction('INFO', this.getFullName(), this.getLogYellow(`⚠️  Already Doing Task - ${title}`)); 
+          Helper.logAction('INFO', this.getFullName(), this.getLogYellow(`⚠️ Already Doing Task - ${title}`)); 
           resolve();
         }
 

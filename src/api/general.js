@@ -47,7 +47,7 @@ export class GeneralAPI extends API {
           Helper.logAction('INFO', this.getFullName(), this.getLogCyan('🎉 Succesfully Daily CheckIn'));  
           await this.logSleepDelay()
         }else{
-          Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️  Already Daily CheckIn'));  
+          Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️ Already Daily CheckIn'));  
           await this.logSleep();
         }
         resolve();
