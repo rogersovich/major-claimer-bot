@@ -318,6 +318,32 @@ export class Helper {
     });
   };
 
+  static delaySimple = (ms, acc, msg, type = 'START') => {
+    return new Promise((resolve) => {
+      let remainingMilliseconds = ms;
+
+      if (acc != undefined || !acc) {
+        this.logAction(type, acc, `${msg}`);
+      } else {
+        this.logAction(type, acc, `${msg}`);
+      }
+
+      const interval = setInterval(() => {
+        remainingMilliseconds -= 1000;
+        
+        if (remainingMilliseconds <= 0) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, 1000);
+
+      setTimeout(async () => {
+        clearInterval(interval);
+        resolve();
+      }, ms);
+    });
+  };
+
   static getAccountName(first_name, last_name){
     const fullName = `${first_name ?? 'Anonymous'} ${last_name ?? ''}`;
     return this.toCapitalize(fullName)
@@ -338,11 +364,10 @@ export class Helper {
       case 'INFO':
         log(
           chalk.yellow(
-            '[Major Claimer Bot]' +
-            `[${chalk.white(date)}]` +
-            `[${chalk.blue(type)}]` +
-            `[${chalk.blue(tele_id)}]` +
-            `: ${chalk.blue(action)}`
+            `[ ${chalk.white(date)} ]` +
+            ` | ${chalk.blue(type)} | ` +
+            `[ ${chalk.white(tele_id)} ]` +
+            `: ${chalk.white(action)}`
           )
         );
         break;
@@ -350,11 +375,10 @@ export class Helper {
       case 'SUCCESS':
         log(
           chalk.yellow(
-            '[Major Claimer Bot]' +
-            `[${chalk.white(date)}]` +
-            `[${chalk.green(type)}]` +
-            `[${chalk.green(tele_id)}]` +
-            `: ${chalk.green(action)}`
+            `[ ${chalk.white(date)} ]` +
+            ` | ${chalk.green(type)} | ` +
+            `[ ${chalk.white(tele_id)} ]` +
+            `: ${chalk.white(action)}`
           )
         );
         break;
@@ -362,11 +386,10 @@ export class Helper {
       case 'WARNING':
         log(
           chalk.yellow(
-            '[Major Claimer Bot]' +
-            `[${chalk.white(date)}]` +
-            `[${chalk.magenta(type)}]` +
-            `[${chalk.magenta(tele_id)}]` +
-            `: ${chalk.magenta(action)}`
+            `[ ${chalk.white(date)} ]` +
+            ` | ${chalk.yellow(type)} | ` +
+            `[ ${chalk.white(tele_id)} ]` +
+            `: ${chalk.white(action)}`
           )
         );
         break;
@@ -374,11 +397,10 @@ export class Helper {
       case 'ERROR':
         log(
           chalk.yellow(
-            '[Major Claimer Bot]' +
-            `[${chalk.white(date)}]` +
-            `[${chalk.red(type)}]` +
-            `[${chalk.red(tele_id)}]` +
-            `: ${chalk.red(action)}`
+            `[ ${chalk.white(date)} ]` +
+            ` | ${chalk.red(type)} | ` +
+            `[ ${chalk.white(tele_id)} ]` +
+            `: ${chalk.white(action)}`
           )
         );
         break;
@@ -386,11 +408,10 @@ export class Helper {
       case 'START':
         log(
           chalk.yellow(
-            '[Major Claimer Bot]' +
-            `[${chalk.white(date)}]` +
-            `[${chalk.cyan(type)}]` +
-            `[${chalk.cyan(tele_id)}]` +
-            `: ${chalk.cyan(action)}`
+            `[ ${chalk.white(date)} ]` +
+            ` | ${chalk.cyan(type)} | ` +
+            `[ ${chalk.white(tele_id)} ]` +
+            `: ${chalk.white(action)}`
           )
         );
         break;
@@ -398,10 +419,9 @@ export class Helper {
       default:
         log(
           chalk.yellow(
-            '[Major Claimer Bot]' +
-            `[${chalk.white(date)}]` +
-            `[${chalk.white(type)}]` +
-            `[${chalk.white(tele_id)}]` +
+            `[ ${chalk.white(date)} ]` +
+            ` | ${chalk.white(type)} | ` +
+            `[ ${chalk.white(tele_id)} ]` +
             `: ${chalk.white(action)}`
           )
         );
@@ -417,7 +437,7 @@ export class Helper {
 
   static getRandomDelayShort() {
     const min = 1 * 60 * 1000; // 1 minutes in milliseconds
-    const max = 2 * 60 * 1000; // 2 minutes in milliseconds
+    const max = 1 * 60 * 1000; // 1 minutes in milliseconds
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 }

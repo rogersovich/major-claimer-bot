@@ -1,5 +1,6 @@
 import { API } from "./api.js";
 import { Helper } from "../utils/helper.js";
+import chalk from 'chalk';
 
 export class TasksAPI extends API {
   constructor(major) {
@@ -9,17 +10,41 @@ export class TasksAPI extends API {
     this.base_url = major.base_url;
   }
 
+  async logSleep(){
+    await Helper.delaySimple(3000, this.getFullName(), `${chalk.yellow('💤 Sleep for a second')}`, 'INFO');
+  }
+
+  async logSleepDelay(){
+    const randomDelayShort = Helper.getRandomDelayShort()
+    await Helper.delaySimple(randomDelayShort, this.getFullName(), `${chalk.yellow('💤 Sleep for a second')}`, 'INFO');
+  }
+
+  getFullName(){
+    const fullName = Helper.getAccountName(this.account.first_name, this.account.last_name)
+
+    return fullName
+  }
+
+  getLogCyan(message){
+    return `${chalk.cyan(message)}`
+  }
+
+  getLogYellow(message){
+    return `${chalk.yellow(message)}`
+  }
+
   async getTask(is_daily) {
+    const fullName = Helper.getAccountName(this.account.first_name, this.account.last_name)
     return new Promise(async (resolve, reject) => {
       try {
-        Helper.logAction('INFO', this.account.id, `(START)(POST) Fetch Task ${is_daily ? "Daily" : ""}...`); 
+        Helper.logAction('INFO', this.getFullName(), this.getLogCyan(`🔃 Fetch Task ${is_daily ? "Daily" : ""}`));
         const data = await this.fetch(
           `${this.base_url}/tasks?is_daily=${is_daily}`,
           "GET",
           this.token
         );
-        Helper.logAction('INFO', this.account.id, `(END)(POST) Succesfully Get Task ${is_daily ? "Daily" : ""}...`);  
-        await Helper.delayLog(3000, this.account.id, 'Waiting next action in', 'WARNING');
+        Helper.logAction('INFO', fullName, this.getLogCyan(`🎉 Succesfully Get Task ${is_daily ? "Daily" : ""}`));  
+        await this.logSleep()
         resolve(data);
       } catch (err) {
         reject(`(GET: /tasks?is_daily=${is_daily}): ${err}...`);
@@ -28,10 +53,10 @@ export class TasksAPI extends API {
   }
 
   async doingTask(task_id, title, award) {
+    const fullName = Helper.getAccountName(this.account.first_name, this.account.last_name)
     return new Promise(async (resolve, reject) => {
       try {
-        Helper.logAction('INFO', this.account.id, `(START)(POST) Post Task - ${title}...`);
-        await Helper.delayLog(5000, this.account.id,  `Doing Task - ${title} in`, 'WARNING');
+        await Helper.delaySimple(5000, this.getFullName(), `${this.getLogCyan(`⌛ Start Task - ${title}`)}`, 'INFO');
         await this.fetch(
           `${this.base_url}/tasks/`,
           "POST",
@@ -41,14 +66,14 @@ export class TasksAPI extends API {
           }
         );
 
-        Helper.logAction('INFO', this.account.id, `(END)(POST) uccesfully Task Completed (${title}) - Reward coins ${award}...`);  
-        await Helper.delayLog(3000, this.account.id, 'Waiting next action in', 'WARNING');
+        Helper.logAction('INFO', fullName, this.getLogCyan(`🎉 Succesfully Task Completed (${title}) - Reward coins ${award}`));  
+        await this.logSleep()
         resolve();
       } catch (err) {
         const checkCode400 = err.message.includes("400")
 
         if(checkCode400){
-          await Helper.delay(this.default_delay, this.account, `Already Doing Task - ${title}...`, this);
+          Helper.logAction('INFO', this.getFullName(), this.getLogYellow(`⚠️  Already Doing Task - ${title}`)); 
           resolve();
         }
 

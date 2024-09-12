@@ -6,6 +6,7 @@ import { GeneralAPI }  from  "./src/api/general.js"
 import { GamesAPI }  from  "./src/api/games.js"
 import { TasksAPI }  from  "./src/api/tasks.js"
 import logger from "./src/utils/logger.js";
+import chalk from 'chalk';
 
 async function operation(acc, query, queryObj, proxy) {
   logger.clear();
@@ -15,7 +16,7 @@ async function operation(acc, query, queryObj, proxy) {
     
     const major = new Major(acc, query, queryObj, proxy);
     
-    await Helper.delayLog(3000, major.account.id, 'Starting Bot in');
+    await Helper.delaySimple(3000, fullName, `${chalk.cyan('🤖 Starting Bot in')}`, 'INFO');
     
     await major.login()
 
@@ -49,6 +50,8 @@ async function operation(acc, query, queryObj, proxy) {
     await gamesAPI.playRoulette();
     await generalAPI.getProfile();
 
+    //* Puzzle Durov
+    await gamesAPI.playDurovPuzzle();
 
     //* Get Task
     const task = await tasksAPI.getTask(false)
@@ -162,7 +165,7 @@ async function startBot() {
       
       // waiting for nex action (2 hour)
       Helper.logAction('INFO', null, 'All Account Processing Complete...');
-      await Helper.delayLog(2 * 60 * 60 * 1000, null, 'Waiting for nex action, Delaying in', 'INFO');
+      await Helper.delayLog(2 * 60 * 60 * 1000, null, 'Sleep in', 'INFO');
 
       for (const params of paramList) {
         await operation(params[0], params[1], params[2], params[3]);

@@ -96,7 +96,7 @@ export class Telegram {
         const updatedAccountQuery = oldQuery.replace(/token: [^,]+/, `token: ${newToken}`);
 
         await Helper.saveQueryFile(this.accountName, updatedAccountQuery);
-        await Helper.delay(3000);
+        await Helper.delaySimple(3000);
         await this.onBoarding();
       } else {
         console.error("Invalid input, Please try again");
@@ -139,7 +139,7 @@ export class Telegram {
         `Session ${newSession} - Created, Please Restart The Bot Again`
       );
       this.storeSession.save();
-      await Helper.delay(3000);
+      await Helper.delaySimple(3000);
       process.exit();
     } catch (error) {
       throw error;
@@ -177,7 +177,7 @@ export class Telegram {
       console.log(
         `Query ${newAccount} - Created, Please Restart The Bot Again`
       );
-      await Helper.delay(3000);
+      await Helper.delaySimple(3000, null, 'Sleep in', 'queryCreation');
       process.exit();
     } catch (error) {
       throw error;
@@ -263,7 +263,7 @@ export class Telegram {
             );
             logger.info(`${this.client.session.serverAddress} | Sleep ${fls}s`);
 
-            await Helper.delay((fls + 3) * 1000);
+            await Helper.delaySimple((fls + 3) * 1000);
           } else {
             throw error;
           }

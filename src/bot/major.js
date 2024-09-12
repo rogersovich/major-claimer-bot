@@ -1,5 +1,6 @@
 import { API } from "../api/api.js";
 import { Helper } from "../utils/helper.js";
+import chalk from 'chalk';
 
 export class Major extends API {
   constructor(acc, query, queryObj, proxy) {
@@ -16,10 +17,20 @@ export class Major extends API {
     this.full_name = null
   }
 
+  async logSleep(){
+    await Helper.delaySimple(3000, this.getFullName(), `${chalk.yellow('💤 Sleep for a second')}`, 'INFO');
+  }
+
+  getFullName(){
+    const fullName = Helper.getAccountName(this.account.first_name, this.account.last_name)
+
+    return fullName
+  }
+
   async login() {
     return new Promise(async (resolve, reject) => {
       try {
-        Helper.logAction('INFO', this.account.id, '(START)(POST) Doing Login...');  
+        Helper.logAction('INFO', this.getFullName(), `${chalk.cyan('🔒 Start Login')}`);  
         const data = await this.fetch(
           `${this.base_url}/auth/tg/`,
           "POST",
@@ -31,11 +42,11 @@ export class Major extends API {
 
         this.token = data.access_token
 
-        Helper.logAction('INFO', this.account.id, '(END)(POST) Succesfully Login...');  
-        await Helper.delayLog(3000, this.account.id, 'Waiting next action in', 'WARNING');
+        Helper.logAction('INFO', this.getFullName(), `${chalk.cyan('🎉 Succesfully Login')}`);  
+        await this.logSleep()
         resolve();
       } catch (err) {
-        reject(`(POST: /auth/tg): ${err}...`);
+        reject(`(POST: /auth/tg): ${err}`);
       }
     });
   }
