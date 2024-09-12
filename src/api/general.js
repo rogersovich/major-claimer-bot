@@ -58,10 +58,9 @@ export class GeneralAPI extends API {
   }
 
   async getProfile(is_msg = false) {
-    const fullName = Helper.getAccountName(this.account.first_name, this.account.last_name)
     return new Promise(async (resolve, reject) => {
       if(is_msg){
-        Helper.logAction('INFO', fullName, this.getLogCyan('🔃 Fetch Profile'));  
+        Helper.logAction('INFO', this.getFullName(), this.getLogCyan('🔃 Fetch Profile'));  
       }
       try {
         await this.fetch(
@@ -70,11 +69,6 @@ export class GeneralAPI extends API {
           this.token
         );
 
-        if(is_msg){
-          Helper.logAction('INFO', fullName, this.getLogCyan('🎉 Succesfully Get Profile'));  
-          await this.logSleep();
-        }
-        
         resolve();
       } catch (err) {
         reject(`(GET:/users/${this.account.id}/): ${err}`);
@@ -85,16 +79,17 @@ export class GeneralAPI extends API {
   async getStreak() {
     return new Promise(async (resolve, reject) => {
       try {
-        await Helper.delay(this.default_delay, this.account, `Fetch Streak`, this);
-        await this.fetch(
+        Helper.logAction('INFO', this.getFullName(), this.getLogCyan('🔃 Fetch Streak'));  
+        const data = await this.fetch(
           `${this.base_url}/user-visits/streak/`,
           "GET",
           this.token
         );
-        await Helper.delay(this.default_delay, this.account, `Succesfully Get Streak`, this);
+
+        Helper.logAction('INFO', this.getFullName(), this.getLogCyan(`🔥 Streak : ${data.streak}`));
         resolve();
       } catch (err) {
-        reject(err);
+        reject(`(GET:/user-visits/streak/): ${err}`);
       }
     });
   }

@@ -8,6 +8,20 @@ import { TasksAPI }  from  "./src/api/tasks.js"
 import logger from "./src/utils/logger.js";
 import chalk from 'chalk';
 
+// Access command-line arguments
+const args = process.argv.slice(2); // Skip the first two arguments (node and script path)
+
+// Define a variable to handle play mode
+let playMode = false;
+
+// Check if '--play' argument is passed
+if (args.includes('--play')) {
+    playMode = true;
+    logger.info("Play mode activated");
+} else {
+    logger.info("Normal mode");
+}
+
 async function operation(acc, query, queryObj, proxy) {
   logger.clear();
   try {
@@ -16,7 +30,7 @@ async function operation(acc, query, queryObj, proxy) {
     
     const major = new Major(acc, query, queryObj, proxy);
     
-    await Helper.delaySimple(3000, fullName, `${chalk.cyan('🤖 Starting Bot in')}`, 'INFO');
+    await Helper.delaySimple(3000, fullName, `${chalk.cyan('🤖 Starting Account')}`, 'INFO');
     
     await major.login()
 
@@ -24,6 +38,7 @@ async function operation(acc, query, queryObj, proxy) {
     const gamesAPI = new GamesAPI(major)
     const tasksAPI = new TasksAPI(major)
 
+    await generalAPI.getStreak()
     await generalAPI.checkIn()
     await generalAPI.getProfile(true)
 
@@ -104,15 +119,20 @@ async function playingBonusCoin(gamesAPI) {
 
 
 let init = false;
-async function startBot() {
+async function startBot(playMode) {
   return new Promise(async (resolve, reject) => {
     try {
 
       logger.info(`BOT STARTED`);
 
       const tele = await new Telegram();
-      if (init == false) {
-        await tele.init();
+
+      if(!playMode){
+        if (init == false) {
+          await tele.init();
+          init = true;
+        }
+      }else{
         init = true;
       }
 
@@ -164,7 +184,7 @@ async function startBot() {
       }
       
       // waiting for nex action (2 hour)
-      Helper.logAction('INFO', 'BOT', `${chalk.blue('✅ All Account Processing Complete')}`);
+      Helper.logAction('INFO', 'BOT', `${chalk.cyan('✅ All Account Processing Complete')}`);
       await Helper.delaySimple(2 * 60 * 60 * 1000, 'BOT', `${chalk.yellow('💤 Sleep in 2 hours')}`, 'INFO');
 
       for (const params of paramList) {
@@ -180,12 +200,14 @@ async function startBot() {
   });
 }
 
+
 (async () => {
   try {
     logger.info("");
     logger.clear();
     logger.info("Application Started");
-    await startBot();
+
+    await startBot(playMode);
   } catch (error) {
     console.error("Error in main process:", error);
     logger.info(`Application Error : ${error}`);
