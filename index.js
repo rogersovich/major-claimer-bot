@@ -66,13 +66,13 @@ async function operation(acc, query, queryObj, proxy) {
     }
     
   } catch (error) {
-
+    const fullName = Helper.getAccountName(acc.first_name, acc.last_name)
     if(error.includes('520')){
-      await Helper.delayLog(10000, acc.id, 'Retrying in ...');
+      await Helper.delaySimple(10000, fullName, `${chalk.yellow('🔃 Retrying in 10 seconds')}`, 'WARNING');
       await operation(acc, query, queryObj, proxy);
     }else{
-      Helper.logAction('ERROR', acc.id, '(API): '+ error);  
-      await Helper.delayLog(3000, acc.id, 'Stopping Bot...');
+      Helper.logAction('ERROR', fullName, `${chalk.red('🚫 (API): '+ error)}`);  
+      await Helper.delayLog(3000, fullName, `${chalk.red('🚫 Stopping Bot')}`, 'ERROR');
     }
     
   }
@@ -164,8 +164,8 @@ async function startBot() {
       }
       
       // waiting for nex action (2 hour)
-      Helper.logAction('INFO', null, 'All Account Processing Complete...');
-      await Helper.delayLog(2 * 60 * 60 * 1000, null, 'Sleep in', 'INFO');
+      Helper.logAction('INFO', fullName, `${chalk.blue('✅ All Account Processing Complete')}`);
+      await Helper.delaySimple(2 * 60 * 60 * 1000, 'BOT', `${chalk.yellow('💤 Sleep in 2 hours')}`, 'INFO');
 
       for (const params of paramList) {
         await operation(params[0], params[1], params[2], params[3]);
