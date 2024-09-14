@@ -45,10 +45,8 @@ export class GeneralAPI extends API {
 
         if(data.is_increased){
           Helper.logAction('INFO', this.getFullName(), this.getLogCyan('🎉 Succesfully Daily CheckIn'));  
-          await this.logSleepDelay()
         }else{
           Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️ Already Daily CheckIn'));  
-          await this.logSleep();
         }
         resolve();
       } catch (err) {
@@ -60,15 +58,16 @@ export class GeneralAPI extends API {
   async getProfile(is_msg = false) {
     return new Promise(async (resolve, reject) => {
       if(is_msg){
-        Helper.logAction('INFO', this.getFullName(), this.getLogCyan('🔃 Fetch Profile'));  
+        // Helper.logAction('INFO', this.getFullName(), this.getLogCyan('🔃 Fetch Profile'));  
       }
       try {
-        await this.fetch(
+        const data = await this.fetch(
           `${this.base_url}/users/${this.account.id}/`,
           "GET",
           this.token
         );
 
+        Helper.logAction('INFO', this.getFullName(), this.getLogCyan(`🌟 Balance : ${data.rating}`));
         resolve();
       } catch (err) {
         reject(`(GET:/users/${this.account.id}/): ${err}`);
@@ -79,7 +78,7 @@ export class GeneralAPI extends API {
   async getStreak() {
     return new Promise(async (resolve, reject) => {
       try {
-        Helper.logAction('INFO', this.getFullName(), this.getLogCyan('🔃 Fetch Streak'));  
+        // Helper.logAction('INFO', this.getFullName(), this.getLogCyan('🔃 Fetch Streak'));  
         const data = await this.fetch(
           `${this.base_url}/user-visits/streak/`,
           "GET",

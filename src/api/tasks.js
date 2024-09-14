@@ -43,7 +43,6 @@ export class TasksAPI extends API {
           "GET",
           this.token
         );
-        Helper.logAction('INFO', fullName, this.getLogCyan(`🎉 Succesfully Get Task ${is_daily ? "Daily" : ""}`));  
         await this.logSleep()
         resolve(data);
       } catch (err) {
@@ -52,28 +51,30 @@ export class TasksAPI extends API {
     });
   }
 
-  async doingTask(task_id, title, award) {
+  async doingTask(task_id, code = null, title, award) {
     const fullName = Helper.getAccountName(this.account.first_name, this.account.last_name)
     return new Promise(async (resolve, reject) => {
       try {
-        await Helper.delaySimple(5000, this.getFullName(), `${this.getLogCyan(`⌛ Start Task - ${title}`)}`, 'INFO');
+        await Helper.delaySimple(5000, this.getFullName(), `${this.getLogCyan(`⌛ Start - ${title}`)}`, 'INFO');
+        const payload = { task_id: task_id };
+        if (code != null) {
+          payload.payload = { code: code };
+        }
         await this.fetch(
           `${this.base_url}/tasks/`,
           "POST",
           this.token,
-          {
-            task_id: task_id
-          }
+          payload
         );
 
-        Helper.logAction('INFO', fullName, this.getLogCyan(`🎉 Succesfully Task Completed (${title}) - Reward coins ${award}`));  
+        Helper.logAction('INFO', fullName, this.getLogCyan(`🎉 (${title}) - Reward coins ${award}`));  
         await this.logSleep()
         resolve();
       } catch (err) {
         const checkCode400 = err.message.includes("400")
 
         if(checkCode400){
-          Helper.logAction('INFO', this.getFullName(), this.getLogYellow(`⚠️ Already Doing Task - ${title}`)); 
+          Helper.logAction('INFO', this.getFullName(), this.getLogYellow(`⚠️ Already Finished Task - ${title}`)); 
           resolve();
         }
 

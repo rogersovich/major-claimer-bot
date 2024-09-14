@@ -9,7 +9,6 @@ export class Major extends API {
     this.token = null
     this.account = acc;
     this.query = query
-    this.total_uncomplete_task = 0
     this.is_play_bonus_coin = false
     this.is_play_swipe_coin = false
     this.base_url = 'https://major.glados.app/api'
@@ -43,7 +42,6 @@ export class Major extends API {
         this.token = data.access_token
 
         Helper.logAction('INFO', this.getFullName(), `${chalk.cyan('🎉 Succesfully Login')}`);  
-        await this.logSleep()
         resolve();
       } catch (err) {
         reject(`(POST: /auth/tg): ${err}`);

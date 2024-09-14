@@ -36,10 +36,14 @@ export class GamesAPI extends API {
     return `${chalk.yellow(message)}`
   }
 
+  getLogGreen(message){
+    return `${chalk.green(message)}`
+  }
+
   async getBonusCoin() {
     return new Promise(async (resolve, reject) => {
       try {
-        Helper.logAction('INFO', this.getFullName(), this.getLogCyan('🔃 Fetch Bonus Coin')); 
+        // Helper.logAction('INFO', this.getFullName(), this.getLogCyan('🔃 Fetch Bonus Coin')); 
         await this.fetch(
           `${this.base_url}/bonuses/coins/`,
           "GET",
@@ -47,7 +51,6 @@ export class GamesAPI extends API {
         );
 
         this.is_play_bonus_coin = false
-        Helper.logAction('INFO', this.getFullName(), this.getLogCyan('🎲 Start Play Coin in 1 Minute'));  
         await this.logSleep()
         resolve();
       } catch (err) {
@@ -56,7 +59,6 @@ export class GamesAPI extends API {
 
         if(checkCode400){
           Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️ Already Get Bonus Coin'));  
-          await this.logSleep()
           resolve();
         }
 
@@ -68,7 +70,7 @@ export class GamesAPI extends API {
   async playBonusCoins(coins_value) {
     return new Promise(async (resolve, reject) => {
       try {
-        await this.fetch(
+        const data = await this.fetch(
           `${this.base_url}/bonuses/coins/`,
           "POST",
           this.token,
@@ -76,7 +78,8 @@ export class GamesAPI extends API {
             coins: coins_value
           }
         );
-        Helper.logAction('INFO', this.getFullName(), this.getLogCyan(`🪙 Claimed Coin: ${coins_value}`));  
+        console.log('hold coin', data)
+        Helper.logAction('INFO', this.getFullName(), this.getLogGreen(`🪙 Claimed Coin: ${coins_value}`));  
         await this.logSleepDelay()
         resolve();
       } catch (err) {
@@ -89,22 +92,23 @@ export class GamesAPI extends API {
   async playRoulette() {
     return new Promise(async (resolve, reject) => {
       try {
-        Helper.logAction('INFO', this.getFullName(), this.getLogCyan('🎲 Start Play Roulette')); 
         const data = await this.fetch(
           `${this.base_url}/roulette/`,
           "POST",
           this.token
         );
-        Helper.logAction('INFO', this.getFullName(), this.getLogCyan(`🪙 Claimed Coin: ${data.rating_award}`));  
-        await this.logSleepDelay()
-        resolve();
+        resolve({
+          is_play: true,
+          reward: data.rating_award,
+        });
       } catch (err) {
         const checkCode400 = err.message.includes("400")
 
         if(checkCode400){
           Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️ Already Play Roulette')); 
-          await this.logSleep()
-          resolve();
+          resolve({
+            is_play: false
+          });
         }
 
         reject(`(POST: /roulette): ${err}`);
@@ -115,7 +119,7 @@ export class GamesAPI extends API {
   async getSwapCoin() {
     return new Promise(async (resolve, reject) => {
       try {
-        Helper.logAction('INFO', this.getFullName(), this.getLogCyan('🔃 Fetch Swipe Coin')); 
+        // Helper.logAction('INFO', this.getFullName(), this.getLogCyan('🔃 Fetch Swipe Coin')); 
         await this.fetch(
           `${this.base_url}/swipe_coin/`,
           "GET",
@@ -132,7 +136,6 @@ export class GamesAPI extends API {
 
         if(checkCode400){
           Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️ Already Play Swipe Coin')); 
-          await this.logSleep()
           resolve();
         }
 
@@ -155,7 +158,7 @@ export class GamesAPI extends API {
         );
 
         this.is_play_swipe_coin = false
-        Helper.logAction('INFO', this.getFullName(), this.getLogCyan(`🪙 Claimed Coin: ${coins_value}`)); 
+        Helper.logAction('INFO', this.getFullName(), this.getLogGreen(`🪙 Claimed Coin: ${coins_value}`)); 
         await this.logSleepDelay()
         resolve();
       } catch (err) {
@@ -164,7 +167,6 @@ export class GamesAPI extends API {
 
         if(checkCode400){
           Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️ Already Play Swipe Coin')); 
-          await this.logSleep()
           resolve();
         }
 
@@ -185,8 +187,6 @@ export class GamesAPI extends API {
 
     return new Promise(async (resolve, reject) => {
       try {
-        Helper.logAction('INFO', this.getFullName(), this.getLogCyan('🎲 Start Play Puzzle')); 
-
         const data = await this.fetch(
           `${this.base_url}/durov/`,
           "POST",
@@ -195,28 +195,31 @@ export class GamesAPI extends API {
         );
 
         if(data.correct){
-          const price = 5000
-          Helper.logAction('INFO', this.getFullName(), this.getLogCyan(`🪙  Claimed Coin: ${price}`)); 
-          resolve()
+          const reward = 5000
+          resolve({
+            is_play: true,
+            reward: reward
+          });
         }
 
-        const detail = data.detail || {};
-        const blockedUntil = detail.blocked_until;
+        // const detail = data.detail || {};
+        // const blockedUntil = detail.blocked_until;
 
-        if (blockedUntil) {
-          const blockedUntilTime = new Date(blockedUntil * 1000).toISOString().replace('T', ' ').substring(0, 19);
-          Helper.logAction('INFO', this.getFullName(), this.getLogCyan(`⌛ Puzzle blocked until: ${blockedUntilTime}`));  
-        }
+        // if (blockedUntil) {
+        //   const blockedUntilTime = new Date(blockedUntil * 1000).toISOString().replace('T', ' ').substring(0, 19);
+        //   Helper.logAction('INFO', this.getFullName(), this.getLogCyan(`⌛ Puzzle blocked until: ${blockedUntilTime}`));  
+        // }
         
-        await this.logSleepDelay()
-        resolve();
+        // await this.logSleepDelay()
+        // resolve();
       } catch (err) {
         const checkCode400 = err.message.includes("400")
 
         if(checkCode400){
           Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️ Already Claimed Puzzle')); 
-          await this.logSleep()
-          resolve();
+          resolve({
+            is_play: false
+          });
         }
 
         reject(`(POST: /durov): ${err}`);

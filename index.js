@@ -7,6 +7,7 @@ import { GamesAPI }  from  "./src/api/games.js"
 import { TasksAPI }  from  "./src/api/tasks.js"
 import logger from "./src/utils/logger.js";
 import chalk from 'chalk';
+import { SETTINGS } from "./src/config/settings.js";
 
 // Access command-line arguments
 const args = process.argv.slice(2); // Skip the first two arguments (node and script path)
@@ -38,19 +39,22 @@ async function operation(acc, query, queryObj, proxy) {
     const gamesAPI = new GamesAPI(major)
     const tasksAPI = new TasksAPI(major)
 
-    await generalAPI.getStreak()
     await generalAPI.checkIn()
+    await generalAPI.getStreak()
     await generalAPI.getProfile(true)
 
+    //* Bonus Coin
     await gamesAPI.getBonusCoin();
     
     //? if no yet play bonus coin
     if(!gamesAPI.is_play_bonus_coin){
       //? Play bonus coin
-      await playingBonusCoin(gamesAPI)
-      await generalAPI.getProfile();
+      await Helper.delaySimple(60000, fullName, `${chalk.cyan('🎲 Start Play Coin in 1 Minute')}`, 'INFO');
+      const init_bonus = Math.floor(Math.random() * (950 - 850 + 1)) + 850;
+      await gamesAPI.playBonusCoins(init_bonus);
     }
 
+    //* Swap Coin
     await gamesAPI.getSwapCoin();
 
     //? if no yet play swipe coin
@@ -59,64 +63,73 @@ async function operation(acc, query, queryObj, proxy) {
       await new Promise((resolve) => setTimeout(resolve, 60000)); // Wait for 1 minute
       const randomCoinValue = Math.floor(Math.random() * (1500 - 1200 + 1)) + 1200; // Get random value between 1200 - 1500
       await gamesAPI.playSwapCoin(randomCoinValue);
-      await generalAPI.getProfile();
     }
 
-    await gamesAPI.playRoulette();
-    await generalAPI.getProfile();
+    //* Roulette
+    const roulette = await gamesAPI.playRoulette();
+    if(roulette.is_play){
+      await Helper.delaySimple(5000, fullName, `${chalk.cyan('🎲 Start Play Roulette')}`, 'INFO');
+      Helper.logAction('INFO', fullName, chalk.green(`🪙 Claimed Coin: ${roulette.reward}`));  
+    }
 
     //* Puzzle Durov
-    await gamesAPI.playDurovPuzzle();
+    const puzzleDurov = await gamesAPI.playDurovPuzzle();
+    if(puzzleDurov.is_play){
+      Helper.logAction('INFO', fullName, chalk.cyan('🎲 Start Play Puzzle')); 
+      Helper.logAction('INFO', fullName, chalk.green(`🪙 Claimed Coin: ${puzzleDurov.reward}`)); 
+    }
 
-    //* Get Task
+    //* Get Task - Not Daily
     const task = await tasksAPI.getTask(false)
-    const uncompletedTask = task.filter((task) => task.type == 'without_check');
-    gamesAPI.total_uncomplete_task = uncompletedTask.length
+    const uncompletedTask = task.filter((task) => task.type == 'without_check' || task.type == 'watch_youtube' || task.type == 'code');
+    const total_uncomplete_task = uncompletedTask.length
+    if(total_uncomplete_task != 0){
+      Helper.logAction('INFO', fullName, `${chalk.cyan(`🃏 Total Task: ${total_uncomplete_task}`)}`);
+    }
 
     if(uncompletedTask.length > 0){
       for (const task of uncompletedTask) {
-        await tasksAPI.doingTask(task.id, task.title, task.award);
+        if(task.type != 'code'){
+          await tasksAPI.doingTask(task.id, null, task.title, task.award);
+        }else{
+          const getCode = SETTINGS.youtube_code.find(item => item.title == task.title)
+          await tasksAPI.doingTask(task.id, getCode.code, task.title, task.award);
+        }
       }
-      await generalAPI.getProfile();
     }
+
+    //* Get Task - Daily
+    const taskDaily = await tasksAPI.getTask(true)
+    const uncompletedTaskDaily = taskDaily.filter((task) => 
+      (task.type == 'without_check' || task.type == 'subscribe_channel') && task.is_completed == false
+    );
+    const total_uncomplete_task_daily = uncompletedTaskDaily.length
+    if(total_uncomplete_task_daily != 0){
+      Helper.logAction('INFO', fullName, `${chalk.cyan(`🃏 Total Task daily: ${total_uncomplete_task_daily}`)}`);
+    }
+
+    if(uncompletedTaskDaily.length > 0){
+      for (const task of uncompletedTaskDaily) {
+        if(task.type != 'code'){
+          await tasksAPI.doingTask(task.id, null, task.title, task.award);
+        }
+      }
+    }
+
+    await generalAPI.getProfile();
     
   } catch (error) {
+    Helper.logAction('ERROR', fullName, `${chalk.red('🚫 '+ error)}`);  
     const fullName = Helper.getAccountName(acc.first_name, acc.last_name)
     if(error.includes('520')){
       await Helper.delaySimple(10000, fullName, `${chalk.yellow('🔃 Retrying in 10 seconds')}`, 'WARNING');
       await operation(acc, query, queryObj, proxy);
     }else{
-      Helper.logAction('ERROR', fullName, `${chalk.red('🚫 (API): '+ error)}`);  
       await Helper.delayLog(3000, fullName, `${chalk.red('🚫 Stopping Bot')}`, 'ERROR');
     }
     
   }
 }
-
-async function playingBonusCoin(gamesAPI) {
-  let init_bonus = 0;
-  const timeout = 60000; // 1 minute
-  const interval = 1000; // 1 second
-  const stopIncrement = Math.floor(Math.random() * 6) + 40; // random value 40 - 45
-
-  await new Promise((resolve) => {
-    let secondsElapsed = 0;
-    const intervalId = setInterval(() => {
-      if (secondsElapsed < stopIncrement) {
-        secondsElapsed += 1;
-        init_bonus += secondsElapsed;
-      }
-    }, interval);
-
-    setTimeout(() => {
-      clearInterval(intervalId); // Stop incrementing after 1 minute
-      resolve();
-    }, timeout);
-  });
-
-  await gamesAPI.playBonusCoins(init_bonus);
-}
-
 
 let init = false;
 async function startBot(playMode) {
