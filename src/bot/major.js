@@ -29,7 +29,7 @@ export class Major extends API {
   async login() {
     return new Promise(async (resolve, reject) => {
       try {
-        Helper.logAction('INFO', this.getFullName(), `${chalk.cyan('🔒 Start Login')}`);  
+        await Helper.delaySimple(1000, this.getFullName(), `${chalk.cyan('🔒 Start Login')}`, 'INFO');
         const data = await this.fetch(
           `${this.base_url}/auth/tg/`,
           "POST",
@@ -41,7 +41,7 @@ export class Major extends API {
 
         this.token = data.access_token
 
-        Helper.logAction('INFO', this.getFullName(), `${chalk.cyan('🎉 Succesfully Login')}`);  
+        await Helper.delaySimple(1000, this.getFullName(), `${chalk.cyan('🎉 Succesfully Login')}`, 'INFO');
         resolve();
       } catch (err) {
         reject(`(POST: /auth/tg): ${err}`);

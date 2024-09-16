@@ -7,7 +7,7 @@ import { GamesAPI }  from  "./src/api/games.js"
 import { TasksAPI }  from  "./src/api/tasks.js"
 import logger from "./src/utils/logger.js";
 import chalk from 'chalk';
-import { SETTINGS } from "./src/config/settings.js";
+import { SETTINGS, getPuzzleCode } from "./src/config/settings.js";
 
 // Access command-line arguments
 const args = process.argv.slice(2); // Skip the first two arguments (node and script path)
@@ -31,7 +31,7 @@ async function operation(acc, query, queryObj, proxy) {
     
     const major = new Major(acc, query, queryObj, proxy);
     
-    await Helper.delaySimple(3000, fullName, `${chalk.cyan('🤖 Starting Account')}`, 'INFO');
+    await Helper.delaySimple(4000, fullName, `${chalk.cyan('🤖 Starting Account')}`, 'INFO');
     
     await major.login()
 
@@ -50,7 +50,7 @@ async function operation(acc, query, queryObj, proxy) {
     if(!gamesAPI.is_play_bonus_coin){
       //? Play bonus coin
       await Helper.delaySimple(60000, fullName, `${chalk.cyan('🎲 Start Play Coin in 1 Minute')}`, 'INFO');
-      const init_bonus = Math.floor(Math.random() * (950 - 850 + 1)) + 850;
+      const init_bonus = Math.floor(Math.random() * (900 - 800 + 1)) + 800;
       await gamesAPI.playBonusCoins(init_bonus);
     }
 
@@ -73,10 +73,14 @@ async function operation(acc, query, queryObj, proxy) {
     }
 
     //* Puzzle Durov
-    const puzzleDurov = await gamesAPI.playDurovPuzzle();
-    if(puzzleDurov.is_play){
-      Helper.logAction('INFO', fullName, chalk.cyan('🎲 Start Play Puzzle')); 
-      Helper.logAction('INFO', fullName, chalk.green(`🪙 Claimed Coin: ${puzzleDurov.reward}`)); 
+    const puzzle_code = getPuzzleCode()
+
+    if(puzzle_code){
+      const puzzleDurov = await gamesAPI.playDurovPuzzle(puzzle_code);
+      if(puzzleDurov.is_play){
+        Helper.logAction('INFO', fullName, chalk.cyan('🎲 Start Play Puzzle')); 
+        Helper.logAction('INFO', fullName, chalk.green(`🪙 Claimed Coin: ${puzzleDurov.reward}`)); 
+      }
     }
 
     //* Get Task - Not Daily
@@ -119,8 +123,8 @@ async function operation(acc, query, queryObj, proxy) {
     await generalAPI.getProfile();
     
   } catch (error) {
-    Helper.logAction('ERROR', fullName, `${chalk.red('🚫 '+ error)}`);  
     const fullName = Helper.getAccountName(acc.first_name, acc.last_name)
+    Helper.logAction('ERROR', fullName, `${chalk.red('🚫 '+ error)}`);
     if(error.includes('520')){
       await Helper.delaySimple(10000, fullName, `${chalk.yellow('🔃 Retrying in 10 seconds')}`, 'WARNING');
       await operation(acc, query, queryObj, proxy);
