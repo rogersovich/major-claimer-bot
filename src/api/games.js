@@ -56,7 +56,7 @@ export class GamesAPI extends API {
         const checkCode400 = err.message.includes("400")
 
         if(checkCode400){
-          Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️ Already Get Bonus Coin'));  
+          await Helper.delaySimple(3000, this.getFullName(), `${chalk.yellow('⚠️ Already Get Bonus Coin')}`, 'INFO');
           resolve();
         }
 
@@ -103,7 +103,7 @@ export class GamesAPI extends API {
         const checkCode400 = err.message.includes("400")
 
         if(checkCode400){
-          Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️ Already Play Roulette')); 
+          await Helper.delaySimple(3000, this.getFullName(), `${chalk.yellow('⚠️ Already Play Roulette')}`, 'INFO');
           resolve({
             is_play: false
           });
@@ -130,7 +130,7 @@ export class GamesAPI extends API {
         const checkCode400 = err.message.includes("400")
 
         if(checkCode400){
-          Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️ Already Play Swipe Coin')); 
+          await Helper.delaySimple(3000, this.getFullName(), `${chalk.yellow('⚠️ Already Play Swipe Coin')}`, 'INFO');
           resolve();
         }
 
@@ -161,7 +161,7 @@ export class GamesAPI extends API {
         const checkCode400 = err.message.includes("400")
 
         if(checkCode400){
-          Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️ Already Play Swipe Coin')); 
+          await Helper.delaySimple(3000, this.getFullName(), `${chalk.yellow('⚠️ Already Play Swipe Coin')}`, 'INFO');
           resolve();
         }
 
@@ -201,7 +201,7 @@ export class GamesAPI extends API {
         const checkCode400 = err.message.includes("400")
 
         if(checkCode400){
-          Helper.logAction('INFO', this.getFullName(), this.getLogYellow('⚠️ Already Claimed Puzzle')); 
+          await Helper.delaySimple(3000, this.getFullName(), `${chalk.yellow('⚠️ Already Claimed Puzzle')}`, 'INFO');
           resolve({
             is_play: false
           });

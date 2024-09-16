@@ -27,7 +27,7 @@ async function operation(acc, query, queryObj, proxy) {
   logger.clear();
   try {
     const fullName = Helper.getAccountName(acc.first_name, acc.last_name)
-    Helper.logStartAccount(fullName, acc.id);
+    // Helper.logStartAccount(fullName, acc.id);
     
     const major = new Major(acc, query, queryObj, proxy);
     
@@ -49,8 +49,8 @@ async function operation(acc, query, queryObj, proxy) {
     //? if no yet play bonus coin
     if(!gamesAPI.is_play_bonus_coin){
       //? Play bonus coin
-      await Helper.delaySimple(60000, fullName, `${chalk.cyan('🎲 Start Play Coin in 1 Minute')}`, 'INFO');
-      const init_bonus = Math.floor(Math.random() * (900 - 800 + 1)) + 800;
+      await Helper.delaySimple(50000, fullName, `${chalk.cyan('🎲 Start Play Coin in 1 Minute')}`, 'INFO');
+      const init_bonus = Math.floor(Math.random() * (915 - 850 + 1)) + 850;
       await gamesAPI.playBonusCoins(init_bonus);
     }
 
@@ -79,7 +79,7 @@ async function operation(acc, query, queryObj, proxy) {
       const puzzleDurov = await gamesAPI.playDurovPuzzle(puzzle_code);
       if(puzzleDurov.is_play){
         Helper.logAction('INFO', fullName, chalk.cyan('🎲 Start Play Puzzle')); 
-        Helper.logAction('INFO', fullName, chalk.green(`🪙 Claimed Coin: ${puzzleDurov.reward}`)); 
+        await Helper.delaySimple(5000, fullName, `${chalk.green(`🪙 Claimed Coin: ${puzzleDurov.reward}`)}`, 'INFO');
       }
     }
 
@@ -121,6 +121,14 @@ async function operation(acc, query, queryObj, proxy) {
     }
 
     await generalAPI.getProfile();
+
+    //! PARAREL ACTIONS ACCOUNT
+    // waiting for nex action (2 hour)
+    Helper.logAction('INFO', 'BOT', `${chalk.cyan('✅ Account Processing Complete')}`);
+    await Helper.delaySimple(2 * 60 * 60 * 1000, 'BOT', `${chalk.yellow('💤 Sleep in 2 hours')}`, 'INFO');
+
+    await operation(acc, query, queryObj, proxy);
+    //! PARAREL ACTIONS ACCOUNT
     
   } catch (error) {
     const fullName = Helper.getAccountName(acc.first_name, acc.last_name)
@@ -196,17 +204,27 @@ async function startBot(playMode) {
         }
       }
 
-      for (const params of paramList) {
-        await operation(params[0], params[1], params[2], params[3]);
-      }
+      //! SINGLE ACTIONS ACCOUNT
+      // for (const params of paramList) {
+      //   await operation(params[0], params[1], params[2], params[3]);
+      // }
       
       // waiting for nex action (2 hour)
-      Helper.logAction('INFO', 'BOT', `${chalk.cyan('✅ All Account Processing Complete')}`);
-      await Helper.delaySimple(2 * 60 * 60 * 1000, 'BOT', `${chalk.yellow('💤 Sleep in 2 hours')}`, 'INFO');
+      // Helper.logAction('INFO', 'BOT', `${chalk.cyan('✅ All Account Processing Complete')}`);
+      // await Helper.delaySimple(2 * 60 * 60 * 1000, 'BOT', `${chalk.yellow('💤 Sleep in 2 hours')}`, 'INFO');
 
-      for (const params of paramList) {
-        await operation(params[0], params[1], params[2], params[3]);
-      }
+      // for (const params of paramList) {
+      //   await operation(params[0], params[1], params[2], params[3]);
+      // }
+       //! SINGLE ACTIONS ACCOUNT
+
+      //! PARAREL ACTIONS ACCOUNT
+      const promiseList = paramList.map(async (data) => {
+        await operation(data[0], data[1], data[2], data[3]);
+      });
+
+      await Promise.all(promiseList);
+      //! PARAREL ACTIONS ACCOUNT
 
       resolve();
     } catch (error) {

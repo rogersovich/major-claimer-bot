@@ -359,14 +359,13 @@ export class Helper {
 
   static logAction(type, tele_id, action){
     tele_id = tele_id ?? 'BOT'
-    const date = moment().format("YYYY-MM-DD HH:mm:ss");
     switch (type) {
       case 'INFO':
         log(
-          chalk.yellow(
-            `[ ${chalk.white(date)} ]` +
-            ` | ${chalk.blue(type)} | ` +
-            `[ ${chalk.white(tele_id)} ]` +
+          chalk.white(
+            `| ${chalk.cyan(type)} | ` +
+            `[Major] | ` +
+            `${chalk.white(tele_id)}` +
             `: ${chalk.white(action)}`
           )
         );
@@ -374,10 +373,10 @@ export class Helper {
     
       case 'SUCCESS':
         log(
-          chalk.yellow(
-            `[ ${chalk.white(date)} ]` +
-            ` | ${chalk.green(type)} | ` +
-            `[ ${chalk.white(tele_id)} ]` +
+          chalk.white(
+            `| ${chalk.green(type)} | ` +
+            `[Major] | ` +
+            `${chalk.white(tele_id)}` +
             `: ${chalk.white(action)}`
           )
         );
@@ -385,10 +384,10 @@ export class Helper {
     
       case 'WARNING':
         log(
-          chalk.yellow(
-            `[ ${chalk.white(date)} ]` +
-            ` | ${chalk.yellow(type)} | ` +
-            `[ ${chalk.white(tele_id)} ]` +
+          chalk.white(
+            `| ${chalk.yellow(type)} | ` +
+            `[Major] | ` +
+            `${chalk.white(tele_id)}` +
             `: ${chalk.white(action)}`
           )
         );
@@ -396,10 +395,10 @@ export class Helper {
     
       case 'ERROR':
         log(
-          chalk.yellow(
-            `[ ${chalk.white(date)} ]` +
-            ` | ${chalk.red(type)} | ` +
-            `[ ${chalk.white(tele_id)} ]` +
+          chalk.white(
+            `| ${chalk.red(type)} | ` +
+            `[Major] | ` +
+            `${chalk.white(tele_id)}` +
             `: ${chalk.white(action)}`
           )
         );
@@ -407,10 +406,10 @@ export class Helper {
     
       case 'START':
         log(
-          chalk.yellow(
-            `[ ${chalk.white(date)} ]` +
-            ` | ${chalk.cyan(type)} | ` +
-            `[ ${chalk.white(tele_id)} ]` +
+          chalk.white(
+            `| ${chalk.cyan(type)} | ` +
+            `[Major] | ` +
+            `${chalk.white(tele_id)}` +
             `: ${chalk.white(action)}`
           )
         );
@@ -418,10 +417,10 @@ export class Helper {
     
       default:
         log(
-          chalk.yellow(
-            `[ ${chalk.white(date)} ]` +
-            ` | ${chalk.white(type)} | ` +
-            `[ ${chalk.white(tele_id)} ]` +
+          chalk.white(
+            `| ${chalk.white(type)} | ` +
+            `[Major] | ` +
+            `${chalk.white(tele_id)}` +
             `: ${chalk.white(action)}`
           )
         );
