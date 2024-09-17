@@ -142,7 +142,7 @@ export class GamesAPI extends API {
   async playSwapCoin(coins_value) {
     return new Promise(async (resolve, reject) => {
       try {
-        Helper.logAction('INFO', this.getFullName(), this.getLogCyan('🎲 Start Play Swipe')); 
+        await Helper.delaySimple(3000, this.getFullName(), `${this.getLogCyan('🎲 Start Play Swipe')}`, 'INFO');
         await this.fetch(
           `${this.base_url}/swipe_coin/`,
           "POST",

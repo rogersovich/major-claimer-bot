@@ -78,9 +78,11 @@ async function operation(acc, query, queryObj, proxy) {
     if(puzzle_code){
       const puzzleDurov = await gamesAPI.playDurovPuzzle(puzzle_code);
       if(puzzleDurov.is_play){
-        Helper.logAction('INFO', fullName, chalk.cyan('🎲 Start Play Puzzle')); 
-        await Helper.delaySimple(5000, fullName, `${chalk.green(`🪙 Claimed Coin: ${puzzleDurov.reward}`)}`, 'INFO');
+        await Helper.delaySimple(5000, fullName, `${chalk.cyan(`🎲 Start Play Puzzle`)}`, 'INFO');
+        await Helper.delaySimple(3000, fullName, `${chalk.green(`🪙 Claimed Coin: ${puzzleDurov.reward}`)}`, 'INFO');
       }
+    }else{
+      await Helper.delaySimple(3000, fullName, `${chalk.yellow('⚠️ No Puzzle code for today')}`, 'INFO');
     }
 
     //* Get Task - Not Daily
