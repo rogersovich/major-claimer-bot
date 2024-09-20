@@ -99,7 +99,11 @@ async function operation(acc, query, queryObj, proxy) {
           await tasksAPI.doingTask(task.id, null, task.title, task.award);
         }else{
           const getCode = SETTINGS.youtube_code.find(item => item.title == task.title)
-          await tasksAPI.doingTask(task.id, getCode.code, task.title, task.award);
+          if(getCode){
+            await tasksAPI.doingTask(task.id, getCode.code, task.title, task.award);
+          }else{
+            await Helper.delaySimple(3000, fullName, `${chalk.yellow(`⚠️ No youtube code - ${task.title}`)}`, 'INFO');
+          }
         }
       }
     }
@@ -135,7 +139,7 @@ async function operation(acc, query, queryObj, proxy) {
   } catch (error) {
     const fullName = Helper.getAccountName(acc.first_name, acc.last_name)
     Helper.logAction('ERROR', fullName, `${chalk.red('🚫 '+ error)}`);
-    if(error.includes('520')){
+    if(typeof error === 'string' && error.includes('520')){
       await Helper.delaySimple(10000, fullName, `${chalk.yellow('🔃 Retrying in 10 seconds')}`, 'WARNING');
       await operation(acc, query, queryObj, proxy);
     }else{

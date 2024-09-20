@@ -34,7 +34,6 @@ export class TasksAPI extends API {
   }
 
   async getTask(is_daily) {
-    const fullName = Helper.getAccountName(this.account.first_name, this.account.last_name)
     return new Promise(async (resolve, reject) => {
       try {
         Helper.logAction('INFO', this.getFullName(), this.getLogCyan(`🔃 Fetch Task ${is_daily ? "Daily" : ""}`));
