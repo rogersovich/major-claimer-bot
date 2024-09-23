@@ -25,8 +25,8 @@ Major is telegram web app mining on telegram
 
 ## Set Up And Run
 
-- clone the project `git clone https://github.com/Widiskel/blum-bot.git`
-- run `cd blum-bot`.
+- clone the project `git clone https://github.com/rogersovich/major-claimer-bot.git`
+- run `cd major-claimer-bot`.
 - run `npm install && mkdir -p accounts`.
 - run `cp src/config/config_tmp.js src/config/config.js && cp src/config/proxy_list_tmp.js src/config/proxy_list.js`
 - To configure the app, run `nano src/config/config.js` and add your telegram app id and hash there (if you use telegram sessions)
