@@ -50,6 +50,7 @@ Major is telegram web app mining on telegram
 7.  
 
 ## Query Troubleshoot
+
 if your bot get eror, with some error code `401` it mean your query expired, go get new query and run bot again and choose option `3` for query modification. 
 
 ## How To Update
