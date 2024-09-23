@@ -12,7 +12,7 @@ Major is telegram web app mining on telegram
 
 - 🤖 Auto Check In
 - 🪙 Auto Play bonus coin
-- ⭐  Auto Play swap coin
+- ⭐ Auto Play swap coin
 - 🎯 Auto Play rolloute
 - 🧩 Auto Play puzzle
 - 🎖️ Auto Complete missions
@@ -45,5 +45,16 @@ Major is telegram web app mining on telegram
    1. Enter Account Name
    2. Enter Telegram Query (you can get query by opening bot app on browser > inspect element > storage / application > session storage > telegram init params > copy tg web app data value)
    3. Start The bot Again after account creation complete
-5.  after bot started choose option 3 start bot
-6.  if something wrong with your Account, reset Account (option 2) first or just delete problematic a, to cancel running bot press `ctrl+c` twice, and start again [from No 1.](#setup-accounts).
+5.  after bot started choose option `2` start bot
+6.  if something wrong with your Account, just delete problematic a, to cancel running bot press `ctrl+c` twice, and start again [from No 1.](#setup-accounts).
+7.  
+
+## Query Troubleshoot
+if your bot get eror, with some error code `401` it mean your query expired, go get new query and run bot again and choose option `3` for query modification. 
+
+## How To Update
+
+- run `git pull` or `git stash && git pull`
+- run `npm update`
+- read Setup and run again if any new step added
+- run the bot again `npm run start`
