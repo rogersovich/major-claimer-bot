@@ -2,6 +2,8 @@
 
 Major is telegram web app mining on telegram
 
+![Major Bot](./assets/major-banner.jpg)
+
 ## Prerequisite
 
 - Node JS (v14)
