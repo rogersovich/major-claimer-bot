@@ -58,6 +58,12 @@ if your bot get eror, with some error code `401` it mean your query expired, go 
 - read Setup and run again if any new step added
 - run the bot again `npm run start`
 
+
+## Notes
+
+- For **play puzzle durov** you need fill up the code in `src/config/settings.js` -> `puzzle_code` day by day, , you can find the code in [Twitter](https://x.com/).
+- For **complete task youtube** -> `youtube_code` you need fill up the code in `src/config/settings.js`, you can find the code in [Twitter](https://x.com/).
+
 ## Support
 
 To support me please give me ⭐ in this github repository. Thank you semoga pada JP 🔥
