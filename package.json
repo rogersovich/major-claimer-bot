@@ -12,10 +12,12 @@
   "keywords": [
     "bot",
     "major",
-    "major-mining"
+    "major-mining",
+    "major-claimer",
+    "major-github"
   ],
   "author": "Rogersovich",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "chalk": "^5.3.0",
     "https-proxy-agent": "^7.0.5",
