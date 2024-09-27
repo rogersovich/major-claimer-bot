@@ -54,6 +54,10 @@ export const SETTINGS = {
       date: '2024-09-26',
       code: [13, 14, 11, 12]
     },
+    {
+      date: '2024-09-27',
+      code: [10, 4, 5, 1]
+    },
   ],
   youtube_code: [
     {
