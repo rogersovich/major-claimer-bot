@@ -68,6 +68,10 @@ export const SETTINGS = {
       title: 'Watch YouTube Shorts #4',
       code: '159390'
     },
+    {
+      title: 'Watch YouTube Shorts #6',
+      code: '241086'
+    },
   ]
 };
 
